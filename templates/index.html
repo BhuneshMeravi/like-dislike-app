@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Like/Dislike</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* Some CSS styles for the buttons and count display */
+    .like-button, .dislike-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .count {
+      font-size: 20px;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="like-button">Like</button>
+    <span class="count" id="like-count">{{ like_count }}</span>
+  </div>
+  <div>
+    <button id="dislike-button">Dislike</button>
+    <span class="count" id="dislike-count">{{ dislike_count }}</span>
+  </div>
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+    $(document).ready(function() {
+      $('.like-button').click(function() {
+        $.ajax({
+          type: "POST",
+          url: "/update_count/like/",
+          headers: {'X-CSRFToken': csrf_token},
+          success: function(response) {
+            $('#like-count').text(parseInt($('#like-count').text()) + 1);
+          }
+        });
+      });
+      $('.dislike-button').click(function() {
+        $.ajax({
+          type: "POST",
+          url: "/update_count/dislike/",
+          headers: {'X-CSRFToken': csrf_token},
+          success: function(response) {
+            $('#dislike-count').text(parseInt($('#dislike-count').text()) + 1);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
